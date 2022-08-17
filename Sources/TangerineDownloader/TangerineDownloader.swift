@@ -19,6 +19,10 @@ public class TangerineDownloader {
 
     private var stepRunner: StepRunner?
 
+    /// Creates an instance of the TangerineDownloader
+    public init() {
+    }
+
     /// Logs into the Tangerine website and requests the accounts
     ///
     /// Note: If you want to call this function multiple times, be aware that
