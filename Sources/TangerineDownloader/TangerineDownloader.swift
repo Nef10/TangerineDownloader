@@ -81,7 +81,7 @@ public class TangerineDownloader {
             }
             group.wait()
         }
-        if let error = error {
+        if let error {
             return .failure(error)
         }
         return .success(transactions)
