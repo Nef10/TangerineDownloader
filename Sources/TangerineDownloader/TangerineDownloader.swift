@@ -21,6 +21,7 @@ public class TangerineDownloader {
 
     /// Creates an instance of the TangerineDownloader
     public init() {
+        // Do nothing
     }
 
     /// Logs into the Tangerine website and requests the accounts
