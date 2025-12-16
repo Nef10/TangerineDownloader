@@ -31,13 +31,13 @@ public class TangerineDownloader {
     ///
     /// - Parameters:
     ///   - username: Tangerine website username / Login ID
-    ///   - pin: Tangerine website / online banking PIN
+    ///   - pin: Tangerine website password
     ///   - completion: completion handler - receives Result with an array containing the account info
-    public func authorizeAndGetAccounts(username: String, pin: String, _ completion: @escaping (Result<[[String: Any]], Error>) -> Void) {
+    public func authorizeAndGetAccounts(username: String, password: String, _ completion: @escaping (Result<[[String: Any]], Error>) -> Void) {
 
         DispatchQueue.main.async {
             do {
-                let steps = self.authorizeAndGetAccountSteps(username: username, pin: pin)
+                let steps = self.authorizeAndGetAccountSteps(username: username, password: password)
                 let stepRunner = try StepRunner(moduleName: "TangerineDownload", steps: steps, scriptBundle: Bundle.module)
                 self.stepRunner = stepRunner
                 if let view = self.delegate?.view() {
@@ -88,7 +88,7 @@ public class TangerineDownloader {
         return .success(transactions)
     }
 
-    private func authorizeAndGetAccountSteps(username: String, pin: String) -> [Step] { // swiftlint:disable:this function_body_length
+    private func authorizeAndGetAccountSteps(username: String, password: String) -> [Step] { // swiftlint:disable:this function_body_length
         let shortWait = WaitStep(waitTimeInSeconds: 1)
         let clickSubmit = ScriptStep(functionName: "clickSubmitButton") { _, _ in .proceed }
         let checkLoggedIn = ScriptStep(functionName: "getTitle") { response, _ in
@@ -122,9 +122,9 @@ public class TangerineDownloader {
                 ScriptStep(functionName: "enterField", params: "input[aria-label='Login ID']", username) { _, _ in .proceed },
                 shortWait,
                 clickSubmit,
-                WaitForConditionStep(assertionName: "assertTitle", timeoutInSeconds: 5, params: "Enter your PIN | Tangerine"),
+                WaitForConditionStep(assertionName: "assertTitle", timeoutInSeconds: 5, params: "Enter your Password | Tangerine"),
                 shortWait,
-                ScriptStep(functionName: "enterField", params: "input[id='login-pin-input']", pin) { _, _ in .proceed },
+                ScriptStep(functionName: "enterField", params: "input[id='passwordId-input']", password) { _, _ in .proceed },
                 shortWait,
                 clickSubmit,
                 WaitForConditionStep(assertionName: "assertTitle", timeoutInSeconds: 5, params: "Enter your Security Code | Tangerine"),
